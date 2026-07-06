@@ -66,6 +66,29 @@ app.listen(3080,() => {
     console.log("Servidor rodando!");
 });
 
-app.get("/", (req,res) => {
+/*app.get("/", (req,res) => {
     res.json(games);
+});*/
+
+/* OT 13 */
+// Função para buscar games pelo nome
+function buscarGamesPorNome(nomeGame) {
+    return games.filter(game =>
+        game.title.toLowerCase().includes(nomeGame.toLowerCase())
+    );
+}
+
+// Buscar games
+app.get('/games', (req, res) => {
+    const nomeGame = req.query.busca;
+
+    const resultado = nomeGame
+        ? buscarGamesPorNome(nomeGame)
+        : games;
+
+    if (resultado.length > 0) {
+        res.json(resultado);
+    } else {
+        res.status(404).send({ "erro": "Nenhum game encontrado" });
+    }
 });
